@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <style>
+        .arrow path {
+            fill: none !important;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <title>Retning a?</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            font-family: sans-serif;
+        }
+
+        .compass-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 2rem auto;
+            border-radius: 50%;
+            background: transparent;
+        }
+
+        .arrow {
+            position: absolute;
+            width: 180px;
+            height: 260px;
+            left: 50%;
+            top: 100%;
+            transform: translate(-50%, -100%) rotate(0deg) translateY(-190px);
+            pointer-events: none;
+        }
+
+        .arrow-east {
+            transform: translate(-50%, -100%) rotate(90deg) translateY(-190px);
+        }
+
+        .arrow-south {
+            transform: translate(-50%, -100%) rotate(180deg) translateY(-190px);
+        }
+
+        .arrow-west {
+            transform: translate(-50%, -100%) rotate(270deg) translateY(-190px);
+        }
+
+        .arrow-label {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            left: 50%;
+            top: 100%;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .label-north {
+            transform: translate(-50%, -260%) translateY(-140px);
+        }
+
+        .label-east {
+            transform: translate(170%, -70%) translateY(-120px);
+        }
+
+        .label-south {
+            transform: translate(-50%, 120%) translateY(-100px);
+        }
+
+        .label-west {
+            transform: translate(-280%, -70%) translateY(-120px);
+        }
+
+        .timer-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 67%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #timer {
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        .compass-outside {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 1.5em;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .compass-outside-north {
+            left: 70%;
+            top: 10%;
+            transform: translateX(-50%);
+        }
+
+        .compass-outside-east {
+            right: -20%;
+            top: 55%;
+            transform: translateY(-50%);
+        }
+
+        .compass-outside-south {
+            left: 70%;
+            bottom: -20%;
+            transform: translateX(-50%);
+        }
+
+        .compass-outside-west {
+            left: -20%;
+            top: 55%;
+            transform: translateY(-50%);
+        }
+
+        .hide {
+            visibility: hidden;
+        }
+
+        #form {
+            margin-top: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="compass-container hide" id="compass">
+    <svg class="arrow" id="arrow-north" viewBox="0 0 180 260">
+        <defs>
+            <clipPath id="clip-north">
+                <path d="M35 230 Q90 120 90 40 Q90 120 145 230" id="shape-north"></path>
+            </clipPath>
+        </defs>
+
+        <rect clip-path="url(#clip-north)" fill="#c7c7c7" height="0" id="fill-north" width="100%"
+              x="0" y="260"></rect>
+
+        <use fill="none" href="#shape-north" stroke="#703a09" stroke-linecap="butt" stroke-width="4"></use>
+    </svg>
+    <svg class="arrow arrow-east" id="arrow-east" viewBox="0 0 180 260">
+        <defs>
+            <clipPath id="clip-east">
+                <path d="M35 230 Q90 120 90 40 Q90 120 145 230" id="shape-east"></path>
+            </clipPath>
+        </defs>
+
+        <rect clip-path="url(#clip-east)" fill="#c7c7c7" height="0" id="fill-east" width="100%"
+              x="0" y="260"></rect>
+
+        <use fill="none" href="#shape-east" stroke="#703a09" stroke-linecap="butt" stroke-width="4"></use>
+    </svg>
+    <svg class="arrow arrow-south" id="arrow-south" viewBox="0 0 180 260">
+        <defs>
+            <clipPath id="clip-south">
+                <path d="M35 230 Q90 120 90 40 Q90 120 145 230" id="shape-south"></path>
+            </clipPath>
+        </defs>
+
+        <rect clip-path="url(#clip-south)" fill="#c7c7c7" height="0" id="fill-south" width="100%"
+              x="0" y="260"></rect>
+
+        <use fill="none" href="#shape-south" stroke="#703a09" stroke-linecap="butt" stroke-width="4"></use>
+    </svg>
+    <svg class="arrow arrow-west" id="arrow-west" viewBox="0 0 180 260">
+        <defs>
+            <clipPath id="clip-west">
+                <path d="M35 230 Q90 120 90 40 Q90 120 145 230" id="shape-west"></path>
+            </clipPath>
+        </defs>
+
+        <rect clip-path="url(#clip-west)" fill="#c7c7c7" height="0" id="fill-west" width="100%"
+              x="0" y="260"></rect>
+
+        <use fill="none" href="#shape-west" stroke="#703a09" stroke-linecap="butt" stroke-width="4"></use>
+    </svg>
+
+    <span class="arrow-label label-north">N</span>
+    <span class="arrow-label label-east">Ø</span>
+    <span class="arrow-label label-south">S</span>
+    <span class="arrow-label label-west">V</span>
+
+    <span class="compass-outside compass-outside-north" id="dono-north"></span>
+    <span class="compass-outside compass-outside-east" id="dono-east"></span>
+    <span class="compass-outside compass-outside-south" id="dono-south"></span>
+    <span class="compass-outside compass-outside-west" id="dono-west"></span>
+
+    <div class="timer-wrapper">
+        <p id="timer">00:00</p>
+    </div>
+</div>
+
+<!--
+<div id="form">
+    <h4>Simulering</h4>
+    <p>
+        Bruk knappene under for å simulere at det legges til poeng på en gitt retning.
+    </p>
+    <p>
+        (Kan ta mellom 5-10 sek fra du trøkker til det vises på kompasset)
+    </p>
+    <div>
+        <label for="username">Brukernavn:</label>
+        <input type="text" id="username" placeholder="Brukernavn">
+    </div>
+
+    <div>
+        <label for="points">Poeng:</label>
+        <input type="text" id="points" placeholder="Poeng">
+    </div>
+
+    <input id="north" type="button" value="Nord">
+    <input id="east" type="button" value="Øst">
+    <input id="south" type="button" value="Sør">
+    <input id="west" type="button" value="Vest">
+    <h4>Klar?</h4>
+    <input id="start" type="button" value="Start og vis kompass">
+    <h4>Færri?</h4>
+    <input id="reset" type="button" value="Nullstill og skjul kompass">
+</div>
+-->
+
+<script type="application/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        const compass = document.querySelector("#compass");
+
+        const arrowNorth = document.querySelector("#arrow-north path");
+        const arrowEast = document.querySelector("#arrow-east path");
+        const arrowSouth = document.querySelector("#arrow-south path");
+        const arrowWest = document.querySelector("#arrow-west path");
+
+        const fillNorth = document.querySelector("#fill-north");
+        const fillEast = document.querySelector("#fill-east");
+        const fillSouth = document.querySelector("#fill-south");
+        const fillWest = document.querySelector("#fill-west");
+
+        const MAX_H = 260;
+
+        function setFill(rectEl, fraction) {
+            const f = Math.max(0, Math.min(1, fraction || 0));
+            const h = Math.round(MAX_H * f);
+            if (rectEl) {
+                rectEl.setAttribute("height", h.toString());
+                rectEl.setAttribute("y", (MAX_H - h).toString());
+            }
+        }
+
+        const donoNorth = document.querySelector("#dono-north");
+        const donoEast = document.querySelector("#dono-east");
+        const donoSouth = document.querySelector("#dono-south");
+        const donoWest = document.querySelector("#dono-west");
+
+        const timer = document.querySelector("#timer");
+
+        let start = null;
+        let end = null;
+        let degrees = null;
+
+        setInterval(() => {
+            if (start == null || end == null) {
+                if (!compass.classList.contains("hide")) {
+                    compass.classList.add("hide");
+                }
+                return;
+            }
+            compass.classList.remove("hide");
+
+            const diffMs = Math.max(0, (end.getTime() - new Date().getTime()));
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const minutes = Math.floor(diffSeconds / 60);
+            const seconds = diffSeconds % 60;
+
+            timer.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }, 1000);
+
+        const updateDegrees = updatedDegrees => {
+            if (degrees === updatedDegrees) {
+                return;
+            }
+
+            degrees = updatedDegrees;
+
+            arrowNorth.setAttribute("fill", "none");
+            arrowEast.setAttribute("fill", "none");
+            arrowSouth.setAttribute("fill", "none");
+            arrowWest.setAttribute("fill", "none");
+
+            if (degrees === 0) {
+                arrowNorth.setAttribute("fill", "orange");
+            } else if (degrees === 90) {
+                arrowEast.setAttribute("fill", "orange");
+            } else if (degrees === 180) {
+                arrowSouth.setAttribute("fill", "orange");
+            } else if (degrees === 270) {
+                arrowWest.setAttribute("fill", "orange");
+            }
+        }
+
+        let currentEventId = null;
+
+        setInterval(() => {
+            fetch(`https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95${currentEventId != null ? "?currentEventId=" + currentEventId : ""}`)
+                .then(response => {
+                    response.json().then(data => {
+                        start = data.start ? new Date(data.start) : null;
+                        end = data.end ? new Date(data.end) : null;
+                        currentEventId = data.nextEvent ? data.nextEvent.id : currentEventId;
+
+                        donoNorth.innerText = "";
+                        donoEast.innerText = "";
+                        donoSouth.innerText = "";
+                        donoWest.innerText = "";
+
+                        if (data.nextEvent != null && data.nextEvent.type === "TIP") {
+                            const eventData = JSON.parse(data.nextEvent.data);
+                            const username = eventData.username;
+                            const amount = eventData.amount;
+                            switch (data.nextEvent.direction) {
+                                case "NORTH":
+                                    donoNorth.innerText = `${amount} kr fra ${username}`;
+                                    break;
+                                case "EAST":
+                                    donoEast.innerText = `${amount} kr fra ${username}`;
+                                    break;
+                                case "SOUTH":
+                                    donoSouth.innerText = `${amount} kr fra ${username}`;
+                                    break;
+                                case "WEST":
+                                    donoWest.innerText = `${amount} kr fra ${username}`;
+                                    break;
+                            }
+                        } else if (data.nextEvent != null && data.nextEvent.type === "BITS") {
+                            const eventData = JSON.parse(data.nextEvent.data);
+                            const username = eventData.user_login;
+                            const bits = eventData.bits;
+                            switch (data.nextEvent.direction) {
+                                case "NORTH":
+                                    donoNorth.innerText = `${bits} bits fra ${username}`;
+                                    break;
+                                case "EAST":
+                                    donoEast.innerText = `${bits} bits fra ${username}`;
+                                    break;
+                                case "SOUTH":
+                                    donoSouth.innerText = `${bits} bits fra ${username}`;
+                                    break;
+                                case "WEST":
+                                    donoWest.innerText = `${bits} bits fra ${username}`;
+                                    break;
+                            }
+                        }
+                        updateDegrees(data.state.degrees);
+
+                        try {
+                            const {
+                                pointsNorth = 0,
+                                pointsEast = 0,
+                                pointsSouth = 0,
+                                pointsWest = 0
+                            } = (data && data.state) ? data.state : {};
+                            const maxPoints = Math.max(pointsNorth, pointsEast, pointsSouth, pointsWest, 1);
+                            setFill(fillNorth, pointsNorth / maxPoints);
+                            setFill(fillEast, pointsEast / maxPoints);
+                            setFill(fillSouth, pointsSouth / maxPoints);
+                            setFill(fillWest, pointsWest / maxPoints);
+
+                            const maxVal = Math.max(pointsNorth, pointsEast, pointsSouth, pointsWest, 0);
+                            const winners = new Set();
+                            if (pointsNorth === maxVal && maxVal > 0) winners.add("N");
+                            if (pointsEast === maxVal && maxVal > 0) winners.add("E");
+                            if (pointsSouth === maxVal && maxVal > 0) winners.add("S");
+                            if (pointsWest === maxVal && maxVal > 0) winners.add("W");
+
+                            fillNorth.setAttribute("fill", winners.has("N") ? "orange" : "#c7c7c7");
+                            fillEast.setAttribute("fill", winners.has("E") ? "orange" : "#c7c7c7");
+                            fillSouth.setAttribute("fill", winners.has("S") ? "orange" : "#c7c7c7");
+                            fillWest.setAttribute("fill", winners.has("W") ? "orange" : "#c7c7c7");
+                        } catch (e) {
+                            console.warn("Failed to update points-based fills:", e);
+                        }
+
+                    });
+                })
+                .catch(reason => {
+                    console.error(reason);
+                })
+        }, 5000);
+
+        const usernameInput = document.querySelector("#username");
+        const pointsInput = document.querySelector("#points");
+
+        document.querySelector("#north").addEventListener("click", () => {
+            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: pointsInput.value,
+                    direction: 'nord',
+                    username: usernameInput.value,
+                    source: 'WEBSITE'
+                })
+            }).then(() => {
+                pointsInput.value = "";
+            });
+        });
+
+        document.querySelector("#east").addEventListener("click", () => {
+            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: pointsInput.value,
+                    direction: 'øst',
+                    username: usernameInput.value,
+                    source: 'WEBSITE'
+                })
+            }).then(() => {
+                pointsInput.value = "";
+            });
+        });
+
+        document.querySelector("#south").addEventListener("click", () => {
+            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: pointsInput.value,
+                    direction: 'sør',
+                    username: usernameInput.value,
+                    source: 'WEBSITE'
+                })
+            }).then(() => {
+                pointsInput.value = "";
+            });
+        });
+
+        document.querySelector("#west").addEventListener("click", () => {
+            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: pointsInput.value,
+                    direction: 'vest',
+                    username: usernameInput.value,
+                    source: 'WEBSITE'
+                })
+            }).then(() => {
+                pointsInput.value = "";
+            });
+        });
+
+        document.querySelector("#start").addEventListener("click", () => {
+            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/start", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: usernameInput.value,
+                    source: 'WEBSITE'
+                })
+            }).then(() => {
+                pointsInput.value = "";
+            });
+        });
+
+        document.querySelector("#reset").addEventListener("click", () => {
+            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/reset", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: usernameInput.value,
+                    source: 'WEBSITE'
+                })
+            }).then(() => {
+                pointsInput.value = "";
+            });
+        });
+    });
+</script>
+</body>
+</html>
