@@ -315,7 +315,7 @@
         let currentEventId = null;
 
         setInterval(() => {
-            fetch(`https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95${currentEventId != null ? "?currentEventId=" + currentEventId : ""}`)
+            fetch(`https://api.j4d.dev/streamrig/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95${currentEventId != null ? "?currentEventId=" + currentEventId : ""}`)
                 .then(response => {
                     response.json().then(data => {
                         start = data.start ? new Date(data.start) : null;
@@ -405,7 +405,7 @@
         const pointsInput = document.querySelector("#points");
 
         document.querySelector("#north").addEventListener("click", () => {
-            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+            fetch("https://api.j4d.dev/streamrig/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -422,7 +422,7 @@
         });
 
         document.querySelector("#east").addEventListener("click", () => {
-            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+            fetch("https://api.j4d.dev/streamrig/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -439,7 +439,7 @@
         });
 
         document.querySelector("#south").addEventListener("click", () => {
-            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+            fetch("https://api.j4d.dev/streamrig/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -456,7 +456,7 @@
         });
 
         document.querySelector("#west").addEventListener("click", () => {
-            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
+            fetch("https://api.j4d.dev/streamrig/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/increase", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -473,7 +473,7 @@
         });
 
         document.querySelector("#start").addEventListener("click", () => {
-            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/start", {
+            fetch("https://api.j4d.dev/streamrig/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/start", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -488,7 +488,7 @@
         });
 
         document.querySelector("#reset").addEventListener("click", () => {
-            fetch("https://api.j4d.dev/chronoguider/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/reset", {
+            fetch("https://api.j4d.dev/streamrig/compass/4616e35c-a6b6-4fd7-b8bd-09a2e1bb5a95/reset", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
